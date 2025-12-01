@@ -224,7 +224,7 @@ The built-in qsort (blue) is the fastest variant across all tested sizes. Its cu
 The parallel version (green) is consistently slower than both sequential and built-in quicksort for array sizes up to 1,000,000 elements.
 This confirms that the cost of thread creation, synchronization, and recursion management dominates at these scales.
 
-### 5.4 Confidence intervals reveal measurement stability
+### 5.3 Confidence intervals reveal measurement stability
 
 The **30 repetitions** allow for meaningful confidence intervals:
 
