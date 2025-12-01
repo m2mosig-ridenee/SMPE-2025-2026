@@ -217,8 +217,7 @@ The improved methodology (30 repetitions, enhanced size grid, statistical analys
 
 ### 5.1 Built-in qsort is consistently strong
 
-The parallel version (green) is consistently slower than both sequential and built-in quicksort for array sizes up to 1,000,000 elements.
-This confirms that the cost of thread creation, synchronization, and recursion management dominates at these scales.
+The built-in qsort (blue) is the fastest variant across all tested sizes. Its curve is smooth, stable, and exhibits low variance thanks to optimized libc implementations.
 
 ### 5.2 Parallel quicksort has overhead at small sizes
 
