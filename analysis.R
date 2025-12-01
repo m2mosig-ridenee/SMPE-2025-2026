@@ -5,7 +5,28 @@ library(tidyr)
 
 
 # Load data
-df <- read.csv("./data/LAPTOP-SMTR1LU7_2025-12-01/measurments_17:46.csv") 
+# NOTE: Update this path to point to your CSV file
+# Example: df <- read.csv("./data/<hostname>_<date>/measurements_<time>.csv")
+df <- read.csv("./data/LAPTOP-SMTR1LU7_2025-12-01/measurements_17:46.csv")
+
+# ===========================================
+# Data Cleaning & Robust Parsing
+# ===========================================
+
+df <- df %>%
+  mutate(
+    Type = trimws(gsub('"', '', as.character(Type))),
+    Type = case_when(
+      grepl("^Sequential", Type, ignore.case = TRUE) ~ "Sequential",
+      grepl("^Parallel", Type, ignore.case = TRUE) ~ "Parallel",
+      grepl("^Built-in", Type, ignore.case = TRUE) ~ "Built-in",
+      TRUE ~ Type  # Keep original if no match
+    )
+  ) %>%
+  mutate(Type = factor(Type, levels = c("Sequential", "Parallel", "Built-in")))
+
+print("Type values after cleaning:")
+print(table(df$Type)) 
 
 # ===========================================
 # 1. Summary statistics + confidence intervals
