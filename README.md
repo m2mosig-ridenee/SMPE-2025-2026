@@ -14,12 +14,14 @@ It includes:
 
 ## Repository Structure
 
+```
 .
 ├── Homework/
 │  ├── quicksort/          # Parallel Quicksort assignment (experiment + analysis)
 │  └── good_graphics/      # Homework: improved figures / visualizations
 ├── Mooc/                  # Notes and progress for the Reproducible Research MOOCs
-├── Notes/                 # Lecture notes and summaries
+└── Notes/                 # Lecture notes and summaries
+```
 
 ## Course Overview
 
