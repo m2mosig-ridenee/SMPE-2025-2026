@@ -5,10 +5,10 @@ This repository contains my work for the course *Scientific Methodology and (Emp
 
 It includes:
 
-- 📝 **Course notes**
-- 🧪 **Homeworks & hands-on exercises**
-- 🎓 **MOOC progress** (Reproducible Research 1 & 2)
-- 💻 **Project code and analyses** (e.g., Parallel Quicksort evaluation)
+- **Course notes**
+- **Homeworks & hands-on exercises**
+- **MOOC progress** (Reproducible Research 1 & 2)
+- **Project code and analyses** (e.g., Parallel Quicksort evaluation)
 
 ---
 
