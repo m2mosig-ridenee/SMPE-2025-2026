@@ -10,8 +10,6 @@ The goal is to apply good experimental methodology to obtain reliable, reproduci
 - **Parallel Quicksort** (Pthreads-based implementation)
 - **libc qsort** (reference baseline)
 
-This project emphasizes experimental rigor, including data collection, noise reduction, statistical analysis, and meaningful visualization.
-
 ---
 
 ## 1. Context of the Assignment
@@ -24,7 +22,7 @@ Only **5 runs** per configuration → not enough to estimate variance, detect an
 
 ### 🔸 Sparse selection of input sizes
 
-Array sizes jumped by powers of 10, hiding important transitions (e.g., where parallelism starts paying off).
+Array sizes jumped by powers of 10, hiding important transitions (where parallelism starts paying off).
 
 ### 🔸 Limited data analysis
 
@@ -45,12 +43,6 @@ for rep in `seq 1 30`; do
     ./src/parallelQuicksort $i >> $OUTPUT_FILE
 done
 ```
-
-This allows:
-- calculating standard error
-- computing 95% confidence intervals
-- filtering out outliers
-- comparing algorithms statistically
 
 ### ✔️ 2.2 Enhanced Set of Array Sizes
 
@@ -85,7 +77,7 @@ The original text logs were converted into structured CSV using two Perl scripts
 - `csv_quicksort_extractor.pl` — produces long-format CSV (Size, Type, Time)
 - `csv_quicksort_extractor2.pl` — produces wide-format CSV (Size, Seq, Par, Libc)
 
-I additionally cleaned the Type column to remove inconsistent spacing (e.g. " Parallel" vs "Parallel"), which was crucial for correct grouping and regression.
+I additionally cleaned the Type column to remove inconsistent spacing (" Parallel" vs "Parallel"), which was crucial for correct grouping and regression.
 
 ### ✔️ 2.5 Statistical Analysis with R
 
@@ -99,27 +91,10 @@ For each (size, algorithm):
 - standard error
 - 95% confidence interval
 
-#### Confidence Interval Visualization
-
-Plots with error bars on log-log scales:
-- X-axis: input size
-- Y-axis: execution time
-- CI displayed as vertical bars
-- Color-coded by algorithm
-
-#### LOESS smoothing (trend lines)
-
-Using:
-```r
-geom_smooth(method="loess")
-```
-
-This reveals:
-- performance trends
-- noise patterns
-- crossover regions
-
-without assuming a linear or polynomial model.
+#### Linear regression
+The script overlays a linear model trend line:
+- useful for comparing asymptotic scaling behavior
+- provides an interpretable slope on log–log axes
 
 ---
 
@@ -171,21 +146,15 @@ This produces raw logs in:
 data/<hostname>_<date>/measurements_<time>.txt
 ```
 
-The script will:
-- Create a timestamped output directory
-- Run experiments for multiple array sizes (randomized order)
-- Execute 30 repetitions per size
-- Measure all three sorting algorithms for each run
-
 ### Step 3 — Convert raw data to CSV
 
 Extract the data into CSV format:
 
 ```bash
-# Long format (recommended for analysis)
+# Long format
 perl scripts/csv_quicksort_extractor.pl < data/<hostname>_<date>/measurements_<time>.txt > data/<hostname>_<date>/measurements_<time>.csv
 
-# Or wide format (alternative)
+# Or wide format
 perl scripts/csv_quicksort_extractor2.pl < data/<hostname>_<date>/measurements_<time>.txt > data/<hostname>_<date>/measurements_<time>_wide.csv
 ```
 
@@ -230,20 +199,6 @@ The **30 repetitions** allow for meaningful confidence intervals:
 
 - **Sequential** and **built-in** algorithms show very tight CIs, indicating stable performance.
 - **Parallel quicksort** shows higher variance, reflecting sensitivity to thread scheduling and OS noise.
-
----
-
-## 6. Lessons Learned
-
-This assignment demonstrates the importance of:
-
-- accounting for measurement noise
-- using repetition to reduce statistical uncertainty
-- designing experiments with appropriate resolution
-- visualizing results on logarithmic scales
-- interpreting speedup/slowdown in the context of algorithmic complexity
-- applying statistical rigor to performance evaluation
-
 ---
 
 ## Author

@@ -5,8 +5,6 @@ library(tidyr)
 
 
 # Load data
-# NOTE: Update this path to point to your CSV file
-# Example: df <- read.csv("./data/<hostname>_<date>/measurements_<time>.csv")
 df <- read.csv("./data/LAPTOP-SMTR1LU7_2025-12-01/measurements_17:46.csv")
 
 # ===========================================
@@ -39,7 +37,8 @@ summary_df <- df %>%
     sd_time = sd(Time),
     n = n(),
     se = sd_time / sqrt(n),
-    ci95 = 1.96 * se,
+    ci_lower = mean_time - 1.96 * se,
+    ci_upper = mean_time + 1.96 * se,
     .groups = "drop"
   )
 
@@ -50,18 +49,39 @@ print(summary_df)
 # ===========================================
 
 p1 <- ggplot(summary_df, aes(x = Size, y = mean_time, color = Type)) +
-  geom_line(linewidth=1) +
-  geom_point(size=3) +
-  geom_errorbar(aes(ymin = mean_time - ci95, ymax = mean_time + ci95),
-                width = 0.1, alpha = 0.6) +
-  geom_smooth(se = TRUE, method = "loess", linewidth = 1.2, alpha = 0.2) +
-  scale_x_log10(labels = comma) +
-  scale_y_log10(labels = comma) +
-  theme_bw(base_size = 14) +
+  geom_point(alpha = 0.6) +
+  geom_smooth(method = "lm", se = TRUE, linewidth = 0.6, alpha = 0.2) +
+  scale_x_log10(labels = scales::comma) +
+  scale_y_log10(labels = scales::comma) +
+
   labs(
-    title = "Execution Time of Quicksort Variants (with 95% CI)",
-    x = "Array Size (log scale)",
-    y = "Execution Time (seconds, log scale)"
+    title = "Quicksort performance comparison",
+    subtitle = "Confidence intervals with linear trend on log–log scale",
+    x = "Array size (log scale)",
+    y = "Execution time (seconds, log scale)",
+  ) +
+
+  theme_bw(base_size = 13) +
+  theme(
+    legend.position = "bottom",
+    plot.title = element_text(size = 16, face = "bold", hjust = 0.5),
+    plot.subtitle = element_text(size = 11, hjust = 0.5, color = "gray40"),
+    panel.grid.minor = element_blank(),
+    plot.margin = margin(12, 12, 12, 12)
   )
+
+# p1 <- ggplot(summary_df, aes(x = Size, y = mean_time, color = Type,, fill = Type)) +
+#   geom_smooth(method = "loess", se = TRUE, linewidth = 1.2, alpha = 0.2) +
+#   geom_line(linewidth=1) +
+#   geom_point(size = 3, alpha = 0.8) +
+#   scale_x_log10(labels = scales::comma) +
+#   scale_y_log10(labels = scales::comma) +
+#   theme_bw(base_size = 14) +
+#   # labs(
+#   #   title = "Execution Time of Quicksort Variants (with 95% CI)",
+#   #   x = "Array Size (log scale)",
+#   #   y = "Execution Time (seconds, log scale)"
+#   # )
+
 
 ggsave("performance_plot.png", p1, width = 8, height = 6)
