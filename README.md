@@ -19,8 +19,9 @@ It includes:
 ├── Homework/
 │  ├── quicksort/          # Parallel Quicksort assignment (experiment + analysis)
 │  └── good_graphics/      # Homework: improved figures / visualizations
+│  └── peer_evaluation/    # Peer evaluation work
 ├── Mooc/                  # Notes and progress for the Reproducible Research MOOCs
-└── Lectures/                 # Lecture notes and summaries
+└── Lectures/              # Lecture notes and summaries
 ```
 
 ## Course Overview
