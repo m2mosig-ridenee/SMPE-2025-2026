@@ -55,6 +55,10 @@ I fit a logistic regression on the full data with:
 **4) Estimate risk at 31°F with CI**  
 I compute the predicted probability at 31°F. Because 31°F is outside the observed temperature range, this is **extrapolation**, so I also report an uncertainty interval. Even with uncertainty, the corrected analysis does not support a low-risk conclusion for such cold conditions.
 
+I also plot the predicted probability curve with a 95% confidence band:
+
+![Prediction curve with 95% CI band](prediction_ci.png)
+
 ## Conclusion
 
 The analysis underestimates the risk mainly because it eliminates the flights with no damage, the most informative part of the dataset, which leads to the wrong conclusion that temperature has no effect. However, using the full dataset shows that the probability of O-ring failure increases at low temperatures. At 31°F, the predicted risk is very high (0.99960) to justify canceling the launch.
