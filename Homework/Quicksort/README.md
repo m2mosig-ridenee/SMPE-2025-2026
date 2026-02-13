@@ -1,10 +1,8 @@
-# Assignment 1 — Experimental Evaluation of Parallel Quicksort
+# Assignment 1: Experimental Evaluation of Parallel Quicksort
 
 ## Objective
 
-This assignment focuses on revisiting and improving the performance evaluation of a multi-threaded quicksort implementation.
-
-The goal is to apply good experimental methodology to obtain reliable, reproducible, and interpretable performance results for three sorting approaches:
+This assignment focuses on reviewing and improving the performance evaluation of a multi-threaded quicksort implementation by applying good experimental methodology to obtain reliable, reproducible, and interpretable performance results for three sorting approaches:
 
 - **Sequential Quicksort** (custom C implementation)
 - **Parallel Quicksort** (Pthreads-based implementation)
@@ -12,21 +10,21 @@ The goal is to apply good experimental methodology to obtain reliable, reproduci
 
 ---
 
-## 1. Context of the Assignment
+## 1. Context
 
-The initial benchmarking approach provided with the project was functional but suffered from several weaknesses:
+The project’s original benchmarking setup worked, but it had several important limitations:
 
-### 🔸 Inadequate number of repetitions
+### Too few repetitions
 
-Only **5 runs** per configuration → not enough to estimate variance, detect anomalies, or compute confidence intervals reliably.
+Only **5 executions** per configuration which not enough to estimate variance, detect anomalies, or compute confidence intervals reliably.
 
-### 🔸 Sparse selection of input sizes
+### Sparse selection of input sizes
 
-Array sizes jumped by powers of 10, hiding important transitions (where parallelism starts paying off).
+Array sizes increased by powers of 10, hiding important transitions (where parallelism starts paying off).
 
-### 🔸 Limited data analysis
+### Limited data analysis
 
-Plots were simplistic and lacked key statistical indicators (CI, smoothing, trends).
+A clear analysis with plots and key statistical indicators (CI, smoothing, trends) was missing.
 
 **My work addresses all these points.**
 
@@ -34,7 +32,7 @@ Plots were simplistic and lacked key statistical indicators (CI, smoothing, tren
 
 ## 2. Improvements Implemented
 
-### ✔️ 2.1 Increased Sampling Density
+### 2.1 Increased Sampling Density
 
 I extended the number of repetitions to obtain more stable estimates:
 
@@ -44,13 +42,13 @@ for rep in `seq 1 30`; do
 done
 ```
 
-### ✔️ 2.2 Enhanced Set of Array Sizes
+### 2.2 Enhanced Set of Array Sizes
 
 I refined the size grid to observe trends more precisely:
 
 ```
 100, 500, 1000, 5000, 10000,
-50000, 100000, 200000, 500000, 1000000, 2000000, 5000000
+50000, 100000, 200000, 500000, 1000000, 2000000
 ```
 
 This gives much better visibility on:
@@ -58,7 +56,7 @@ This gives much better visibility on:
 - where parallel quicksort becomes competitive
 - how each variant scales as n log n grows
 
-### ✔️ 2.3 Randomized Execution Order
+### 2.3 Randomized Execution Order
 
 To minimize systematic bias from execution order effects:
 
@@ -71,30 +69,29 @@ This results in:
 - reduced systematic bias
 - better statistical validity
 
-### ✔️ 2.4 Data Cleaning & Robust Parsing
+### 2.4 Data Cleaning & Robust Parsing
 
-The original text logs were converted into structured CSV using two Perl scripts:
-- `csv_quicksort_extractor.pl` — produces long-format CSV (Size, Type, Time)
-- `csv_quicksort_extractor2.pl` — produces wide-format CSV (Size, Seq, Par, Libc)
+The original text logs were converted into structured CSV using two scripts:
+- `csv_quicksort_extractor.pl` : produces long-format CSV (Size, Type, Time)
+- `csv_quicksort_extractor2.pl` : produces wide-format CSV (Size, Seq, Par, Libc)
 
 I additionally cleaned the Type column to remove inconsistent spacing (" Parallel" vs "Parallel"), which was crucial for correct grouping and regression.
 
-### ✔️ 2.5 Statistical Analysis with R
+### 2.5 Statistical Analysis with R
 
 The R analysis script (`analysis.R`) performs:
 
 #### Summary statistics
-
 For each (size, algorithm):
-- mean execution time
-- standard deviation
-- standard error
-- 95% confidence interval
+- mean execution time (central tendency)
+- standard deviation (dispersion across runs)
+- standard error (uncertainty on the estimated mean)
 
-#### Linear regression
-The script overlays a linear model trend line:
-- useful for comparing asymptotic scaling behavior
-- provides an interpretable slope on log–log axes
+#### Confidence intervals (95%)
+In the plots, confidence intervals are displayed as shaded bands around the mean values, allowing direct comparison of measurement reliability across algorithms and input sizes.
+
+#### Scaling trend estimation (linear regression on log–log axes)
+The script overlays a linear regression trend line on log–log axes that is useful for comparing asymptotic scaling behavior and provides an interpretable slope.
 
 ---
 
@@ -108,7 +105,7 @@ The script overlays a linear model trend line:
 │   └── Makefile                  # Build configuration
 │
 ├── scripts/
-│   ├── run_benchmarking.sh       # Automated experiment runner (improved)
+│   ├── run_benchmarking.sh           # Automated experiment runner (improved)
 │   ├── csv_quicksort_extractor.pl    # Long-format CSV parser
 │   └── csv_quicksort_extractor2.pl   # Wide-format CSV parser
 │
@@ -127,7 +124,7 @@ The script overlays a linear model trend line:
 
 ## 4. How to Run the Experiment
 
-### Step 1 — Compile the sorting program
+### Step 1: Compile the sorting program
 
 ```bash
 make -C src/
@@ -135,7 +132,7 @@ make -C src/
 
 This will compile `parallelQuicksort.c` into the executable `src/parallelQuicksort`.
 
-### Step 2 — Execute the benchmark suite
+### Step 2: Execute the benchmark suite
 
 ```bash
 bash scripts/run_benchmarking.sh
@@ -146,7 +143,7 @@ This produces raw logs in:
 data/<hostname>_<date>/measurements_<time>.txt
 ```
 
-### Step 3 — Convert raw data to CSV
+### Step 3: Convert raw data to CSV
 
 Extract the data into CSV format:
 
@@ -158,7 +155,7 @@ perl scripts/csv_quicksort_extractor.pl < data/<hostname>_<date>/measurements_<t
 perl scripts/csv_quicksort_extractor2.pl < data/<hostname>_<date>/measurements_<time>.txt > data/<hostname>_<date>/measurements_<time>_wide.csv
 ```
 
-### Step 4 — Run the analysis
+### Step 4: Run the analysis
 
 Before running the R script, update the file path in `analysis.R` to point to your CSV file:
 
@@ -182,7 +179,7 @@ This generates plots including:
 
 ![Final experiment performance plot](./data/LAPTOP-SMTR1LU7_2025-12-01/performance_plot.png)
 
-The improved methodology (30 repetitions, enhanced size grid, statistical analysis) provides a clear view of the performance behavior of the three quicksort variants.
+The improved methodology (30 repetitions, enhanced size grid, statistical analysis) provides a clear view of the performance behavior of the 3 quicksort variants.
 
 ### 5.1 Built-in qsort is consistently strong
 
@@ -190,12 +187,12 @@ The built-in qsort (blue) is the fastest variant across all tested sizes. Its cu
 
 ### 5.2 Parallel quicksort has overhead at small sizes
 
-The parallel version (green) is consistently slower than both sequential and built-in quicksort for array sizes up to 1,000,000 elements.
+The parallel version shows overhead at small sizes but potentially becomes competitive at larger sizes
 This confirms that the cost of thread creation, synchronization, and recursion management dominates at these scales.
 
 ### 5.3 Confidence intervals reveal measurement stability
 
-The **30 repetitions** allow for meaningful confidence intervals:
+The 30 repetitions allow for meaningful confidence intervals:
 
 - **Sequential** and **built-in** algorithms show very tight CIs, indicating stable performance.
 - **Parallel quicksort** shows higher variance, reflecting sensitivity to thread scheduling and OS noise.
@@ -209,9 +206,9 @@ Université Grenoble Alpes
 
 ---
 
-## Notes
+<!-- ## Notes
 
 - The parallel quicksort uses a thread level of 10 (defined in `parallelQuicksort.c`)
 - All timing measurements use `gettimeofday()` for microsecond precision
 - The analysis requires R packages: `ggplot2`, `dplyr`, `scales`, and `tidyr`
-- Install R packages if needed: `install.packages(c("ggplot2", "dplyr", "scales", "tidyr"))`
+- Install R packages if needed: `install.packages(c("ggplot2", "dplyr", "scales", "tidyr"))` -->
