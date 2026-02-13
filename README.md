@@ -34,8 +34,8 @@ It includes:
 - Challenger Report(Updated): [challenger_analysis.md](https://github.com/m2mosig-ridenee/SMPE-2025-2026/blob/master/Homework/challenger/challenger_analysis.md)
 - Challenger corrected analysis version(Updated): [challenger_analysis.ipynb](https://github.com/m2mosig-ridenee/SMPE-2025-2026/blob/master/Homework/challenger/challenger_with_corrected_version.ipynb)
 (Note: Please find the proposed corrected analysis at the bottom of the file)
-- Peer evaluation: [Subject 1: Atmospheric CO2 Concentration Analysis](https://github.com/m2mosig-ridenee/SMPE-2025-2026/blob/master/Homework/Peer%20Evaluation/peer_evaluation_co2.ipynb)
-<!-- - Peer evaluation 2: [Subject 6: Around Simpson's Paradox](https://github.com/m2mosig-ridenee/SMPE-2025-2026/tree/master/Homework/Peer%20Evaluation) -->
+- Peer evaluation 1: [Subject 1: Atmospheric CO2 Concentration Analysis](https://github.com/m2mosig-ridenee/SMPE-2025-2026/blob/master/Homework/Peer%20Evaluation/peer_evaluation_co2.ipynb)
+- Peer evaluation 2: [Subject 6: Around Simpson's Paradox](https://github.com/m2mosig-ridenee/SMPE-2025-2026/tree/master/Homework/Peer%20Evaluation/Simpson_Paradox)
 - Research papers analysis notes: [research_papers_analysis.pdf](https://github.com/m2mosig-ridenee/SMPE-2025-2026/blob/master/Homework/research_papers_analysis.pdf)
 
 ## Course Overview
